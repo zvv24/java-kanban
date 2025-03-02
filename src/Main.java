@@ -1,115 +1,65 @@
-import java.util.Scanner;
+import Managers.TaskManager;
+import Tasks.*;
+
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        TaskManager taskManager = new TaskManager();
-        EpicManager epicManager = new EpicManager();
-        SubTaskManager subTaskManager = new SubTaskManager();
-        System.out.println("Поехали!");
+        TaskManager manager = new TaskManager();
 
-        while (true) {
-            printMenu();
-            int command = scanner.nextInt();
+        Task task1 = new Task("Задача 1", "Описание задачи 1", Status.NEW);
+        Task task2 = new Task("Задача 2", "Описание задачи 2", Status.NEW);
+        Epic epic1 = new Epic("Эпик 1", "В нем должно быть 2 подзадачи", Status.NEW, new ArrayList<>());
+        Epic epic2 = new Epic("Эпик 2", "В нем должна быть 1 подзадача", Status.NEW, new ArrayList<>());
+        SubTask subTask1 = new SubTask("Подзадача 1", "Подзадача эпика 1", Status.NEW, new ArrayList<>());
+        SubTask subTask2 = new SubTask("Подзадача 2", "Подзадача эпика 1", Status.IN_PROGRESS, new ArrayList<>());
+        SubTask subTask3 = new SubTask("Подзадача 3", "Подзадача эпика 2", Status.NEW, new ArrayList<>());
 
-            switch (command) {
-                case 1 -> {
-                    System.out.println("Какой список вы хотите получить? \n 1 - Задач \n 2 - Эпиков \n 3 - Подзадач");
-                    command = scanner.nextInt();
-                    if (command == 1) {
-                        taskManager.printAllTasks();
-                    } else if (command == 2) {
-                        epicManager.printAllEpics();
-                    } else if (command == 3) {
-                        subTaskManager.printAllSubTasks();
-                    } else {
-                        System.out.println("Такой команды нет");
-                    }
-                }
-                case 2 -> {
-                    System.out.println("Какой список вы хотите удалить? \n 1 - Задач \n 2 - Эпиков \n 3 - Подзадач");
-                    command = scanner.nextInt();
-                    if (command == 1) {
-                        taskManager.deleteAllTasks();
-                    } else if (command == 2) {
-                        epicManager.deleteAllEpics();
-                    } else if (command == 3) {
-                        subTaskManager.deleteAllSubTasks();
-                    } else {
-                        System.out.println("Такой команды нет");
-                    }
-                }
-                case 3 -> {
-                    System.out.println("Что вы хотите получить? \n 1 - Задачу \n 2 - Эпик \n 3 - Подзадачу");
-                    command = scanner.nextInt();
-                    if (command == 1) {
-                        taskManager.searchTaskByID();
-                    } else if (command == 2) {
-                        epicManager.searchEpicByID();
-                    } else if (command == 3) {
-                        subTaskManager.searchSubTaskByID();
-                    } else {
-                        System.out.println("Такой команды нет");
-                    }
-                }
-                case 4 -> {
-                    System.out.println("Что вы хотите создать? \n 1 - Задачу \n 2 - Эпик \n 3 - Подзадачу");
-                    command = scanner.nextInt();
-                    if (command == 1) {
-                        taskManager.newTask();
-                    } else if (command == 2) {
-                        epicManager.newEpic();
-                    } else if (command == 3) {
-                        subTaskManager.newSubTasks();
-                    } else {
-                        System.out.println("Такой команды нет");
-                    }
-                }
-                case 5 -> {
-                    System.out.println("Что вы хотите обновить? \n 1 - Задачу \n 2 - Эпик \n 3 - Подзадачу");
-                    command = scanner.nextInt();
-                    if (command == 1) {
-                        taskManager.updateTask();
-                    } else if (command == 2) {
-                        epicManager.updateEpic();
-                    } else if (command == 3) {
-                        subTaskManager.updateSubTask();
-                    } else {
-                        System.out.println("Такой команды нет");
-                    }
-                }
-                case 6 -> {
-                    System.out.println("Что вы хотите удалить? \n 1 - Задачу \n 2 - Эпик \n 3 - Подзадачу");
-                    command = scanner.nextInt();
-                    if (command == 1) {
-                        taskManager.deleteTaskByID();
-                    } else if (command == 2) {
-                        epicManager.deleteEpicByID();
-                    } else if (command == 3) {
-                        subTaskManager.deleteSubTaskByID();
-                    } else {
-                        System.out.println("Такой команды нет");
-                    }
-                }
-                case 7 -> epicManager.printListSubTasks();
-                case 0 -> {
-                    System.out.println(0);
-                    return;
-                }
-            }
+        manager.newTask(task1); // 1
+        manager.newTask(task2); // 2
+        manager.newEpic(epic1); // 3
+        manager.newEpic(epic2); // 4
+        manager.newSubTasks(subTask1); // 5
+        manager.newSubTasks(subTask2); // 6
+        manager.newSubTasks(subTask3); // 7
+        manager.addSubTask(5, 3);
+        manager.addSubTask(6, 3);
+        manager.addSubTask(7, 4);
+        manager.checkStatus(3);
+        manager.checkStatus(4);
 
-        }
-    }
-    public static void printMenu(){
-        System.out.println("1 - Получить список");
-        System.out.println("2 - Удаление");
-        System.out.println("3 - Получение по идентификатору");
-        System.out.println("4 - Создание");
-        System.out.println("5 - Обновление");
-        System.out.println("6 - Удаление по идентификатору");
-        System.out.println("7 - Получение списка всех подзадач определённого эпика.");
-        System.out.println("0 - Выход");
+        System.out.println(manager.tasks);
+        System.out.println();
+        System.out.println(manager.epics);
+        System.out.println();
+        System.out.println(manager.subTasks);
+        System.out.println("--------------------------------------------------");
+
+        task2.setStatus(Status.IN_PROGRESS);
+        manager.updateTask(2, task2);
+        subTask3.setStatus(Status.DONE);
+        manager.updateSubTask(7, subTask3);
+        manager.checkStatus(4);
+
+        System.out.println(manager.tasks);
+        System.out.println();
+        System.out.println(manager.epics);
+        System.out.println();
+        System.out.println(manager.subTasks);
+        System.out.println("--------------------------------------------------");
+
+        manager.deleteTaskByID(1);
+        manager.deleteEpicByID(3);
+        manager.clearEpicList(5);
+        manager.clearEpicList(6);
+
+        System.out.println(manager.tasks);
+        System.out.println();
+        System.out.println(manager.epics);
+        System.out.println();
+        System.out.println(manager.subTasks);
+        System.out.println("--------------------------------------------------");
     }
 }
 
