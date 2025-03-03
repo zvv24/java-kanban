@@ -142,4 +142,14 @@ public class TaskManager {
     public void clearSubTaskList(int id) {
         epics.get(id).getSubTask().clear();
     }
+
+    //Получение списка всех подзадач определённого эпика.
+    public ArrayList<Subtask> printSubtasksСertainEpic(int id) {
+        ArrayList<Integer> listSubtaks = epics.get(id).getSubtask();
+        ArrayList<Subtask> subtasks1 = new ArrayList<>();
+        for (int idSubtask : listSubtaks) {
+            subtasks1.add(subtasks.get(idSubtask));
+        }
+        return subtasks1;
+    }
 }
