@@ -59,6 +59,7 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return id == task.id &&
@@ -69,11 +70,6 @@ public class Task {
 
     @Override
     public int hashCode() {
-        int hash = 17;
-        if (id != 0) {
-            hash = hash + id;
-        }
-        hash = hash * 31;
-        return hash;
+        return Objects.hash(id, name, description, status);
     }
 }

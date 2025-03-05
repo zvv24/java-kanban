@@ -1,5 +1,8 @@
 import managers.TaskManager;
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 
@@ -25,11 +28,11 @@ public class Main {
         manager.newSubtasks(subtask3);
 
 
-        System.out.println(manager.tasks);
+        System.out.println(manager.getTasks());
         System.out.println();
-        System.out.println(manager.epics);
+        System.out.println(manager.getEpics());
         System.out.println();
-        System.out.println(manager.subtasks);
+        System.out.println(manager.getSubtasks());
         System.out.println("--------------------------------------------------");
 
         task2.setStatus(Status.IN_PROGRESS);
@@ -38,23 +41,21 @@ public class Main {
         manager.updateSubtask(subtask3);
 
 
-        System.out.println(manager.tasks);
+        System.out.println(manager.getTasks());
         System.out.println();
-        System.out.println(manager.epics);
+        System.out.println(manager.getEpics());
         System.out.println();
-        System.out.println(manager.subtasks);
+        System.out.println(manager.getSubtasks());
         System.out.println("--------------------------------------------------");
 
         manager.deleteTaskByID(1);
-        manager.deleteSubtaskByID(6);
-        manager.deleteAllSubtasks();
 
 
-        System.out.println(manager.tasks);
+        System.out.println(manager.getTasks());
         System.out.println();
-        System.out.println(manager.epics);
+        System.out.println(manager.getEpics());
         System.out.println();
-        System.out.println(manager.subtasks);
+        System.out.println(manager.getSubtasks());
         System.out.println("--------------------------------------------------");
     }
 }

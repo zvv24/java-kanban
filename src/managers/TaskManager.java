@@ -1,6 +1,9 @@
 package managers;
 
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,9 +11,9 @@ import java.util.List;
 
 public class TaskManager {
     private int id = 1;
-    public HashMap<Integer, Task> tasks = new HashMap<>();
-    public HashMap<Integer, Epic> epics = new HashMap<>();
-    public HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
     private int newId() {
         return id++;
@@ -145,12 +148,6 @@ public class TaskManager {
     }
 
     //Получение списка всех подзадач определённого эпика.
-    public ArrayList<Integer> printListSubtasks(int id) {
-        Epic listSubtaks = epics.get(id);
-        return listSubtaks.getSubtask();
-    }
-
-    //Получение списка всех подзадач определённого эпика.
     public ArrayList<Subtask> printSubtasksСertainEpic(int id) {
         ArrayList<Integer> listSubtaks = epics.get(id).getSubtask();
         ArrayList<Subtask> subtasks1 = new ArrayList<>();
@@ -158,5 +155,17 @@ public class TaskManager {
             subtasks1.add(subtasks.get(idSubtask));
         }
         return subtasks1;
+    }
+
+    public HashMap<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    public HashMap<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    public HashMap<Integer, Subtask> getSubtasks() {
+        return subtasks;
     }
 }
