@@ -1,3 +1,4 @@
+import managers.InMemoryTaskManager;
 import managers.TaskManager;
 import tasks.Epic;
 import tasks.Status;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        TaskManager manager = new InMemoryTaskManager();
 
         Task task1 = new Task(1, "Задача 1", "Описание задачи 1", Status.NEW);
         Task task2 = new Task(2, "Задача 2", "Описание задачи 2", Status.NEW);
@@ -26,37 +27,6 @@ public class Main {
         manager.newSubtasks(subtask1);
         manager.newSubtasks(subtask2);
         manager.newSubtasks(subtask3);
-
-
-        System.out.println(manager.getTasks());
-        System.out.println();
-        System.out.println(manager.getEpics());
-        System.out.println();
-        System.out.println(manager.getSubtasks());
-        System.out.println("--------------------------------------------------");
-
-        task2.setStatus(Status.IN_PROGRESS);
-        manager.updateTask(task2);
-        subtask3.setStatus(Status.DONE);
-        manager.updateSubtask(subtask3);
-
-
-        System.out.println(manager.getTasks());
-        System.out.println();
-        System.out.println(manager.getEpics());
-        System.out.println();
-        System.out.println(manager.getSubtasks());
-        System.out.println("--------------------------------------------------");
-
-        manager.deleteTaskByID(1);
-
-
-        System.out.println(manager.getTasks());
-        System.out.println();
-        System.out.println(manager.getEpics());
-        System.out.println();
-        System.out.println(manager.getSubtasks());
-        System.out.println("--------------------------------------------------");
     }
 }
 
