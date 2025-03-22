@@ -53,5 +53,5 @@ public interface TaskManager {
     //Получение списка всех подзадач определённого эпика.
     ArrayList<Subtask> printSubtasksСertainEpic(int id);
 
-    HistoryManager getHistory();
+    List<Task> getHistory();
 }
