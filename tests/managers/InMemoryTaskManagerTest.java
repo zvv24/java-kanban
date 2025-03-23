@@ -12,30 +12,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryTaskManagerTest {
 
     InMemoryTaskManager manager;
+    Task task = new Task(1, "Задача", "Описание задачи", Status.NEW);
+    Epic epic = new Epic(2, "Эпик", "Описание эпика", Status.DONE, new ArrayList<>());
+    Subtask subtask1 = new Subtask(3, "Подзадача", "Описание подзадачи", Status.NEW, 2);
+    Subtask subtask2 = (new Subtask(4, "Подзадача 2", "Подзадача эпика 1", Status.IN_PROGRESS, 2));
+
 
     @BeforeEach
     void beforeEach() {
         manager = new InMemoryTaskManager();
+        manager.newTask(task);
+        manager.newEpic(epic);
+        manager.newSubtasks(subtask1);
+        manager.newSubtasks(subtask2);
     }
 
     @Test
     public void inMemoryTaskManagerCanAddAndSearchForDifferentTasks() {
-        Task task = new Task(1, "Задача", "Описание задачи", Status.NEW);
-        manager.newTask(task);
-        Epic epic = new Epic(2, "Эпик", "Описание эпика", Status.DONE, new ArrayList<>());
-        manager.newEpic(epic);
-        Subtask subtask = new Subtask(3, "Подзадача", "Описание подзадачи", Status.NEW, 2);
-        manager.newSubtasks(subtask);
-
         assertEquals(task, manager.searchTaskByID(1), "Задача не найдена");
         assertEquals(epic, manager.searchEpicByID(2), "Эпик не найдена");
-        assertEquals(subtask, manager.searchSubtaskByID(3), "Подзадача не найдена");
+        assertEquals(subtask1, manager.searchSubtaskByID(3), "Подзадача не найдена");
     }
 
     @Test
     public void taskDoesNotChangeWhenAddedToManager() {
-        Task task = new Task(1, "Задача", "Описание задачи", Status.NEW);
-        manager.newTask(task);
         Task addedTask = manager.searchTaskByID(1);
 
         assertEquals(task.getId(), addedTask.getId(), "id не должно изменяться при добавлении в менеджер");
@@ -46,46 +46,24 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void deletingSubtasksTheyShouldBeDeletedFromTheEpics() {
-        Epic epic1 = new Epic(1, "Эпик 1", "В нем должно быть 2 подзадачи", Status.NEW, new ArrayList<>());
-        manager.newEpic(epic1);
-        manager.newSubtasks(new Subtask(2, "Подзадача 1", "Подзадача эпика 1", Status.NEW, 1));
-        manager.newSubtasks(new Subtask(3, "Подзадача 2", "Подзадача эпика 1", Status.IN_PROGRESS, 1));
-
         manager.deleteAllSubtasks();
-        assertTrue(epic1.getSubtask().isEmpty());
+        assertTrue(epic.getSubtask().isEmpty());
     }
 
     @Test
     public void deletingAllEpicsDeletedAllSubtasks() {
-        Epic epic1 = new Epic(1, "Эпик 1", "В нем должно быть 2 подзадачи", Status.NEW, new ArrayList<>());
-        manager.newEpic(epic1);
-        manager.newSubtasks(new Subtask(2, "Подзадача 1", "Подзадача эпика 1", Status.NEW, 1));
-        manager.newSubtasks(new Subtask(3, "Подзадача 2", "Подзадача эпика 1", Status.IN_PROGRESS, 1));
-
         manager.deleteAllEpics();
         assertTrue(manager.printAllSubtasks().isEmpty());
     }
 
     @Test
     public void printSubtasksOfCertainEpic() {
-        Epic epic1 = new Epic(1, "Эпик 1", "В нем должно быть 2 подзадачи", Status.NEW, new ArrayList<>());
-        manager.newEpic(epic1);
-        manager.newSubtasks(new Subtask(2, "Подзадача 1", "Подзадача эпика 1", Status.NEW, 1));
-        manager.newSubtasks(new Subtask(3, "Подзадача 2", "Подзадача эпика 1", Status.IN_PROGRESS, 1));
-
-        ArrayList<Subtask> subtasks = manager.printSubtasksСertainEpic(1);
+        ArrayList<Subtask> subtasks = manager.printSubtasksСertainEpic(2);
         assertEquals(manager.printAllSubtasks(), subtasks);
     }
 
     @Test
     public void inMemoryTaskManagerCanDeleteTasksById() {
-        Task task = new Task(1, "Задача", "Описание задачи", Status.NEW);
-        manager.newTask(task);
-        Epic epic = new Epic(2, "Эпик", "Описание эпика", Status.DONE, new ArrayList<>());
-        manager.newEpic(epic);
-        Subtask subtask = new Subtask(3, "Подзадача", "Описание подзадачи", Status.NEW, 2);
-        manager.newSubtasks(subtask);
-
         manager.deleteTaskByID(1);
         manager.deleteSubtaskByID(3);
         manager.deleteEpicByID(2);
@@ -97,35 +75,36 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void inMemoryTaskManagerCanUpdateTasks() {
-        Task task = new Task(1, "Задача", "Описание задачи", Status.NEW);
-        manager.newTask(task);
-        Epic epic = new Epic(2, "Эпик", "Описание эпика", Status.DONE, new ArrayList<>());
-        manager.newEpic(epic);
-        Subtask subtask = new Subtask(3, "Подзадача", "Описание подзадачи", Status.NEW, 2);
-        manager.newSubtasks(subtask);
-
         task.setName("1");
         epic.setDescription("2");
-        subtask.setStatus(Status.IN_PROGRESS);
+        subtask1.setStatus(Status.IN_PROGRESS);
 
         manager.updateTask(task);
         manager.updateEpic(epic);
-        manager.updateSubtask(subtask);
+        manager.updateSubtask(subtask1);
 
         assertEquals(task.getName(), manager.searchTaskByID(1).getName());
         assertEquals(epic.getDescription(), manager.searchEpicByID(2).getDescription());
-        assertEquals(subtask.getStatus(), manager.searchSubtaskByID(3).getStatus());
+        assertEquals(subtask1.getStatus(), manager.searchSubtaskByID(3).getStatus());
     }
 
     @Test
     public void inMemoryTaskManagerCanPrintTasks() {
-        manager.newTask(new Task(1, "Задача", "Описание задачи", Status.NEW));
-        manager.newEpic(new Epic(2, "Эпик", "Описание эпика", Status.DONE, new ArrayList<>()));
-        manager.newSubtasks(new Subtask(3, "Подзадача", "Описание подзадачи", Status.NEW, 2));
+        assertTrue(manager.printAllTasks().contains(task));
+        assertTrue(manager.printAllEpics().contains(epic));
+        assertTrue(manager.printAllSubtasks().contains(subtask1));
+        assertTrue(manager.printAllSubtasks().contains(subtask2));
+    }
 
-        assertNotNull(manager.printAllTasks());
-        assertNotNull(manager.printAllEpics());
-        assertNotNull(manager.printAllSubtasks());
+    @Test
+    public void searchMethodsAddedToHistory() {
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(manager.searchSubtaskByID(3));
+        tasks.add(manager.searchTaskByID(1));
+        tasks.add(manager.searchEpicByID(2));
+        tasks.add(manager.searchSubtaskByID(4));
 
+        assertEquals(tasks, manager.getHistory());
+        assertEquals(epic, manager.getHistory().get(2));
     }
 }

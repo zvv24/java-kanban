@@ -1,10 +1,7 @@
 package managers;
 
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
+import tasks.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,5 +46,16 @@ class InMemoryHistoryManagerTest {
         manager.searchTaskByID(11);
         assertNotEquals(task1, manager.getHistory().get(0));
         assertEquals(task11, manager.getHistory().get(9));
+    }
+
+    @Test
+    public void NoMore10TasksInHistory() {
+        for (int i = 1; i <= 12; i++) {
+            manager.newTask(new Task(i, "name", "des", Status.NEW));
+            manager.searchTaskByID(i);
+        }
+
+        final int MAX_HISTORY_SIZE = 10;
+        assertEquals(MAX_HISTORY_SIZE, manager.getHistory().size());
     }
 }
