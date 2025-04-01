@@ -27,6 +27,21 @@ public class Main {
         manager.newSubtasks(subtask1);
         manager.newSubtasks(subtask2);
         manager.newSubtasks(subtask3);
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(2);
+        manager.searchEpicByID(3);
+        manager.searchEpicByID(4);
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(1);
+        manager.deleteTaskByID(3);
+
+
+
+        System.out.println("-----");
+        System.out.println(manager.getHistory());
     }
 }
 
