@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class InMemoryHistoryManagerTest {
     InMemoryTaskManager manager = new InMemoryTaskManager();
@@ -32,30 +31,41 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void historyManagerDeletesTheOldestTask() {
-        for (int i = 1; i <= 10; i++) {
-            manager.newTask(new Task(i, "name", "des", Status.NEW));
-            manager.searchTaskByID(i);
-        }
+    public void historyManagerNotSaveRepeats() {
+        manager.newTask(new Task(1, "Задача 1", "Описание задачи 1", Status.NEW));
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(1);
+        manager.searchTaskByID(1);
 
-        Task task1 = new Task(1, "name", "des", Status.NEW);
-        Task task11 = new Task(11, "Задача", "Описание", Status.NEW);
-        manager.newTask(task11);
-
-        assertEquals(task1, manager.getHistory().get(0));
-        manager.searchTaskByID(11);
-        assertNotEquals(task1, manager.getHistory().get(0));
-        assertEquals(task11, manager.getHistory().get(9));
+        assertEquals(1, manager.getHistory().size());
     }
 
     @Test
-    public void NoMore10TasksInHistory() {
-        for (int i = 1; i <= 12; i++) {
+    public void historyIsNotLimitedInSize() {
+        for (int i = 1; i <= 9999; i++) {
             manager.newTask(new Task(i, "name", "des", Status.NEW));
             manager.searchTaskByID(i);
         }
 
-        final int MAX_HISTORY_SIZE = 10;
-        assertEquals(MAX_HISTORY_SIZE, manager.getHistory().size());
+        assertEquals(9999, manager.getHistory().size());
+    }
+
+    @Test
+    public void historyManagerDeletesSubtasksIfEpicIsDeleted() {
+        manager.newTask(new Task(1, "Задача 1", "Описание задачи 1", Status.NEW));
+        manager.newEpic(new Epic(2, "Эпик 1", "Описание эпика 1", Status.NEW, new ArrayList<>()));
+        manager.newSubtasks(new Subtask(3, "Подзадача 1", "Описание подзадачи 1", Status.NEW, 2));
+        manager.newSubtasks(new Subtask(4, "Подзадача 1", "Описание подзадачи 1", Status.NEW, 2));
+
+        manager.searchTaskByID(1);
+        manager.searchEpicByID(2);
+        manager.searchSubtaskByID(3);
+        manager.searchSubtaskByID(4);
+
+        assertEquals(4, manager.getHistory().size());
+
+        manager.deleteEpicByID(2);
+
+        assertEquals(1, manager.getHistory().size());
     }
 }
