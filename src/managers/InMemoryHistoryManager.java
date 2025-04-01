@@ -52,7 +52,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void addHistory(Task task) {
         if (task != null) {
             int id = task.getId();
-            if (historyMap.containsKey(id)){
+            if (historyMap.containsKey(id)) {
                 removeNode(historyMap.get(id));
             }
             linkLast(task);
