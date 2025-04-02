@@ -31,7 +31,9 @@ public class Main {
         manager.searchTaskByID(1);
         manager.searchTaskByID(2);
         manager.searchEpicByID(3);
-        manager.searchSubtaskByID(4);
+        manager.searchSubtaskByID(5);
+        manager.searchSubtaskByID(6);
+        manager.searchSubtaskByID(7);
         System.out.println(manager.getHistory());
         System.out.println("----------");
 
@@ -54,4 +56,3 @@ public class Main {
         System.out.println("----------");
     }
 }
-

@@ -62,17 +62,29 @@ public class InMemoryTaskManager implements TaskManager {
     //удаление всех объектов
     @Override
     public void deleteAllTasks() {
+        for (Task task : printAllTasks()) {
+            historyManager.removeHistory(task.getId());
+        }
         tasks.clear();
     }
 
     @Override
     public void deleteAllEpics() {
+        for (Epic epic : printAllEpics()) {
+            for (int subtask : epic.getSubtask()) {
+                historyManager.removeHistory(subtask);
+            }
+            historyManager.removeHistory(epic.getId());
+        }
         subtasks.clear();
         epics.clear();
     }
 
     @Override
     public void deleteAllSubtasks() {
+        for (Subtask subtask : printAllSubtasks()) {
+            historyManager.removeHistory(subtask.getId());
+        }
         subtasks.clear();
         for (int idEpic : epics.keySet()) {
             epics.get(idEpic).getSubtask().clear();
