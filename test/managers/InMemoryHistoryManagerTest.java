@@ -60,8 +60,7 @@ class InMemoryHistoryManagerTest {
 
         manager.removeHistory(1);
 
-        assertEquals(epic1, manager.getHistory().get(0));
-        assertEquals(subtask1, manager.getHistory().get(1));
+        assertEquals(List.of(epic1, subtask1), manager.getHistory());
     }
 
     @Test
