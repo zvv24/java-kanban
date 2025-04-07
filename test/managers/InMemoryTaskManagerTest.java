@@ -2,7 +2,10 @@ package managers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,5 +109,24 @@ class InMemoryTaskManagerTest {
 
         assertEquals(tasks, manager.getHistory());
         assertEquals(epic, manager.getHistory().get(2));
+    }
+
+    @Test
+    public void deletesSubtaskFromHistoryManagerIfEpicIsDeleted() {
+        manager.newTask(new Task(1, "Задача 1", "Описание задачи 1", Status.NEW));
+        manager.newEpic(new Epic(2, "Эпик 1", "Описание эпика 1", Status.NEW, new ArrayList<>()));
+        manager.newSubtasks(new Subtask(3, "Подзадача 1", "Описание подзадачи 1", Status.NEW, 2));
+        manager.newSubtasks(new Subtask(4, "Подзадача 1", "Описание подзадачи 1", Status.NEW, 2));
+
+        manager.searchTaskByID(1);
+        manager.searchEpicByID(2);
+        manager.searchSubtaskByID(3);
+        manager.searchSubtaskByID(4);
+
+        assertEquals(4, manager.getHistory().size());
+
+        manager.deleteEpicByID(2);
+
+        assertEquals(1, manager.getHistory().size());
     }
 }

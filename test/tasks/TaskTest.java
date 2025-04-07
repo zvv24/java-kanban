@@ -12,5 +12,4 @@ class TaskTest {
         Task task2 = new Task(1, "Задача 1", "Описание задачи 1", Status.NEW);
         assertEquals(task2, task1, "Задачи не равны");
     }
-
 }

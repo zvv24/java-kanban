@@ -12,5 +12,4 @@ class SubtaskTest {
         Subtask subtask2 = new Subtask(2, "подзадача 1", "Описание подзадачи 1", Status.NEW, 1);
         assertEquals(subtask2, subtask1, "Подзадачи не равны");
     }
-
 }
