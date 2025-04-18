@@ -7,11 +7,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private static File file = new File("file.csv");
+    private final File file;
+
+    public FileBackedTaskManager(File file) {
+        this.file = file;
+    }
 
     @Override
     public Task newTask(Task task) {
@@ -96,9 +101,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.write("id,type,name,status,description,epic");
+            writer.write("id,type,name,status,description,epic\n");
             for (Task task : getAllTasks()) {
                 writer.write(toString(task));
+                writer.newLine();
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка сохранения", e);
@@ -114,23 +120,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private static String toString(Task task) {
-        if (task.getClass() == Subtask.class) {
-            return String.format("%d, %s, %s, %s, %s, %d",
+        if (task instanceof Subtask) {
+            return String.format("%d,%s,%s,%s,%s,%d",
                     task.getId(),
                     TaskType.SUBTASK,
                     task.getName(),
                     task.getStatus(),
                     task.getDescription(),
                     ((Subtask) task).getEpic());
-        } else if (task.getClass() == Epic.class) {
-            return String.format("%d, %s, %s, %s, %s",
+        } else if (task instanceof Epic) {
+            return String.format("%d,%s,%s,%s,%s",
                     task.getId(),
                     TaskType.EPIC,
                     task.getName(),
                     task.getStatus(),
                     task.getDescription());
         } else {
-            return String.format("%d, %s, %s, %s, %s",
+            return String.format("%d,%s,%s,%s,%s",
                     task.getId(),
                     TaskType.TASK,
                     task.getName(),
@@ -147,19 +153,41 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Status status = Status.valueOf(buf[3]);
         String description = buf[4];
 
-        if (taskType.equals(TaskType.SUBTASK)) {
+        if (taskType == TaskType.SUBTASK) {
             return new Subtask(id, name, description, status, Integer.parseInt(buf[5]));
-        } else if (taskType.equals(taskType.EPIC)) {
+        } else if (taskType == TaskType.EPIC) {
             return new Epic(id, name, description, status, new ArrayList<>());
         } else {
             return new Task(id, name, description, status);
         }
     }
 
-    class ManagerSaveException extends RuntimeException {
+    public static FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+
+        try {
+            List<String> list = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+            for (int i = 1; i < list.size(); i++) {
+                String buf = list.get(i);
+                Task task = fromString(buf);
+
+                if (task.getClass() == Subtask.class) {
+                    fileBackedTaskManager.subtasks.put(task.getId(), (Subtask) task);
+                } else if (task.getClass() == Epic.class) {
+                    fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                } else {
+                    fileBackedTaskManager.tasks.put(task.getId(), task);
+                }
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка загрузки", e);
+        }
+        return fileBackedTaskManager;
+    }
+
+    static class ManagerSaveException extends RuntimeException {
         public ManagerSaveException(final String message, final Throwable cause) {
             super(message, cause);
         }
     }
-
 }
