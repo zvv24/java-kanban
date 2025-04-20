@@ -25,8 +25,8 @@ public class ConversionMethods {
                         task.getStatus(),
                         task.getDescription());
             }
+            default -> throw new IllegalArgumentException("Неверный тип задачи");
         }
-        return "Неверный тип задачи";
     }
 
     public static Task fromString(String value) {
@@ -47,8 +47,7 @@ public class ConversionMethods {
             case TASK -> {
                 return new Task(id, name, description, status);
             }
+            default -> throw new IllegalArgumentException("Неверный тип задачи");
         }
-
-        return null;
     }
 }

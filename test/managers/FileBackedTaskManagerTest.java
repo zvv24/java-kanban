@@ -10,7 +10,6 @@ import tasks.Task;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,11 +44,10 @@ class FileBackedTaskManagerTest {
         manager.newTask(task);
         manager.newEpic(epic);
         manager.newSubtasks(subtask);
-        List<Task> tasks1 = manager.getAllTasks();
-
         FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
-        List<Task> tasks2 = fileBackedTaskManager.getAllTasks();
 
-        assertEquals(tasks1, tasks2);
+        assertEquals(manager.printAllTasks(), fileBackedTaskManager.printAllTasks());
+        assertEquals(manager.printAllEpics(), fileBackedTaskManager.printAllEpics());
+        assertEquals(manager.printAllSubtasks(), fileBackedTaskManager.printAllSubtasks());
     }
 }
