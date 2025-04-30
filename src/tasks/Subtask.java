@@ -25,6 +25,11 @@ public class Subtask extends Task {
         return epic;
     }
 
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
+    }
+
     public void setEpic(int epic) {
         this.epic = epic;
     }
