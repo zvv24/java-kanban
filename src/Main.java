@@ -1,13 +1,4 @@
-import managers.InMemoryTaskManager;
-import managers.TaskManager;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
-
-import java.util.ArrayList;
-
-public class Main {
+/*public class Main {
 
     public static void main(String[] args) {
         TaskManager manager = new InMemoryTaskManager();
@@ -19,7 +10,6 @@ public class Main {
         Subtask subtask1 = new Subtask(5, "Подзадача 1", "Подзадача эпика 1", Status.NEW, 3);
         Subtask subtask2 = new Subtask(6, "Подзадача 1", "Подзадача эпика 1", Status.NEW, 3);
         Subtask subtask3 = new Subtask(7, "Подзадача 2", "Подзадача эпика 1", Status.IN_PROGRESS, 3);
-
         manager.newTask(task1);
         manager.newTask(task2);
         manager.newEpic(epic1);
@@ -55,4 +45,4 @@ public class Main {
         System.out.println(manager.getHistory());
         System.out.println("----------");
     }
-}
+}*/
