@@ -1,13 +1,28 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
     private int epic;
 
-    public Subtask(int id, String name, String description, Status status, int epic) {
-        super(id, name, description, status);
+    public Subtask(int id, String name, String description, Status status, int epic, LocalDateTime startTime, Duration duration) {
+        super(id, name, description, status, startTime, duration);
         this.epic = epic;
+    }
+
+    public int getEpic() {
+        return epic;
+    }
+
+    public void setEpic(int epic) {
+        this.epic = epic;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
     }
 
     @Override
@@ -19,19 +34,6 @@ public class Subtask extends Task {
                 ", status=" + getStatus() +
                 ", epic=" + epic +
                 '}';
-    }
-
-    public int getEpic() {
-        return epic;
-    }
-
-    @Override
-    public TaskType getType() {
-        return TaskType.SUBTASK;
-    }
-
-    public void setEpic(int epic) {
-        this.epic = epic;
     }
 
     @Override

@@ -2,48 +2,49 @@ package managers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class FileBackedTaskManagerTest {
-    File file;
-    FileBackedTaskManager manager;
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+    private File file;
 
     @BeforeEach
-    public void beforeEach() throws IOException {
-        file = File.createTempFile("file", ".csv");
+    public void setUp() throws IOException {
+        file = File.createTempFile("tasks", ".csv");
         file.deleteOnExit();
-        manager = new FileBackedTaskManager(file);
+        super.setUp();
+    }
+
+    @Override
+    public FileBackedTaskManager createManager() {
+        return new FileBackedTaskManager(file);
     }
 
     @Test
-    public void savingAndUploadingEmptyFile() {
+    public void savingAndUploadingEmptyFile() throws IOException {
+        File emptyFile = File.createTempFile("empty", ".csv");
+        emptyFile.deleteOnExit();
+        FileBackedTaskManager emptyManager = new FileBackedTaskManager(emptyFile);
+
+        emptyManager.deleteAllTasks();
+        emptyManager.deleteAllEpics();
+        emptyManager.deleteAllSubtasks();
+        emptyManager.save();
+
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(emptyFile);
+
+        assertTrue(loadedManager.printAllTasks().isEmpty(), "Список задач должен быть пустым");
+        assertTrue(loadedManager.printAllEpics().isEmpty(), "Список эпиков должен быть пустым");
+        assertTrue(loadedManager.printAllSubtasks().isEmpty(), "Список подзадач должен быть пустым");
+    }
+
+    @Test
+    public void savingAndUploadingSomeTasks() {
         manager.save();
-        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
-
-        assertTrue(fileBackedTaskManager.printAllTasks().isEmpty());
-        assertTrue(fileBackedTaskManager.printAllEpics().isEmpty());
-        assertTrue(fileBackedTaskManager.printAllSubtasks().isEmpty());
-    }
-
-    @Test
-    public void savingAndUploadingSomeTasks() throws IOException {
-        Task task = new Task(1, "Задача 1", "Описание задачи 1", Status.NEW);
-        Epic epic = new Epic(2, "Эпик 1", "Описание эпика 1", Status.NEW, new ArrayList<>());
-        Subtask subtask = new Subtask(3, "Подзадача 1", "Описание подзадачи 1", Status.NEW, 2);
-
-        manager.newTask(task);
-        manager.newEpic(epic);
-        manager.newSubtasks(subtask);
         FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
 
         assertEquals(manager.printAllTasks(), fileBackedTaskManager.printAllTasks());
