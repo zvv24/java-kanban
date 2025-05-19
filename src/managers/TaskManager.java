@@ -6,6 +6,7 @@ import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
     //Создание нового объекта
@@ -54,4 +55,6 @@ public interface TaskManager {
     ArrayList<Subtask> printSubtasksСertainEpic(int id);
 
     List<Task> getHistory();
+
+    TreeSet<Task> getPrioritizedTasks();
 }
