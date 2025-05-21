@@ -208,8 +208,8 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        LocalDateTime start = null;
-        LocalDateTime end = null;
+        LocalDateTime start = LocalDateTime.MAX;
+        LocalDateTime end = LocalDateTime.MIN;
         Duration duration = Duration.ZERO;
 
         for (int subtaskId : epic.getSubtask()) {
@@ -234,17 +234,17 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setEndTime(end);
     }
 
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
     //Получение списка всех подзадач определённого эпика.
     @Override
     public ArrayList<Subtask> printSubtasksСertainEpic(int id) {
         return epics.get(id).getSubtask().stream()
                 .map(subtasks::get)
                 .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return historyManager.getHistory();
     }
 
     @Override
