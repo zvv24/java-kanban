@@ -241,7 +241,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Получение списка всех подзадач определённого эпика.
     @Override
-    public ArrayList<Subtask> printSubtasksСertainEpic(int id) {
+    public ArrayList<Subtask> printSubtasksCertainEpic(int id) {
         return epics.get(id).getSubtask().stream()
                 .map(subtasks::get)
                 .collect(Collectors.toCollection(ArrayList::new));

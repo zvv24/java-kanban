@@ -52,7 +52,7 @@ public interface TaskManager {
     Subtask deleteSubtaskByID(int id);
 
     //Получение списка всех подзадач определённого эпика.
-    ArrayList<Subtask> printSubtasksСertainEpic(int id);
+    ArrayList<Subtask> printSubtasksCertainEpic(int id);
 
     List<Task> getHistory();
 
