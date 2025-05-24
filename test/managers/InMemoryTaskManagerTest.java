@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class InMemoryTaskManagerTest extends managers.TaskManagerTest<InMemoryTaskManager> {
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Override
     public InMemoryTaskManager createManager() {

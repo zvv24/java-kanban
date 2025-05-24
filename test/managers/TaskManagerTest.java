@@ -111,7 +111,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void printSubtasksOfCertainEpic() {
-        ArrayList<Subtask> subtasks = manager.printSubtasksСertainEpic(2);
+        ArrayList<Subtask> subtasks = manager.printSubtasksCertainEpic(2);
         assertEquals(manager.printAllSubtasks(), subtasks);
     }
 
