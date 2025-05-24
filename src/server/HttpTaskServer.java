@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    HttpServer httpServer;
-    TaskManager taskManager;
-    Gson gson;
+    private HttpServer httpServer;
+    private TaskManager taskManager;
+    private Gson gson;
 
     public HttpTaskServer(TaskManager taskManager) throws IOException {
         this.taskManager = taskManager;

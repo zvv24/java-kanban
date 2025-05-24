@@ -34,6 +34,6 @@ public class PrioritizedHandlerTest extends HttpTaskServerTest {
         List<Task> prioritized = gson.fromJson(response.body(), new TypeToken<List<Task>>() {
         }.getType());
         assertEquals(2, prioritized.size());
-        assertEquals("Задача 1", prioritized.get(0).getName());
+        assertEquals("Задача 1", prioritized.getFirst().getName());
     }
 }
